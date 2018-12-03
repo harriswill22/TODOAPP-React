@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import List from'./list';
 
 class TodoList extends Component {
     constructor(props){
@@ -15,13 +16,37 @@ class TodoList extends Component {
                     Todo App
                 </h1>
 
-                <form>
-                    <input placeholder="Enter Todo"></input>
+                <form onSubmit={this._OnSubmit}>
+                    <input value={this.state.term} 
+                    onChange={this._OnChange} 
+                    placeholder="Enter Todo"></input>
                     <button type = "submit"> Add </button>
+                    <div>
+                        <List items = {this.state.items}/>
+                    </div>
                 </form>
             </div>
         );
     }
+
+
+    _OnChange =(event) =>{
+        this.setState({
+            term: event.target.value
+        });
+    }
+
+    _OnSubmit =(event) =>{
+        event.preventDefault();
+        // console.log('submitted');
+        this.setState({
+            term: "",
+            items:[...this.state.items,this.state.term]
+        });
+        
+    };
+
+
 }
 
 export default TodoList;
