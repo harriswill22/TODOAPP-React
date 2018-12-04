@@ -5,12 +5,12 @@ return (<ul>
         {props.items.map((item, index) => {
         return <li key={index} 
         className="single-todo" 
-        onClick ={props.handleClick.bind(null,index)}
-        // onClick={() => {
-        // console.log(`clicked ${index}`);
-        // props.handleClick(index);
-        // }} 
-        > {item} </li>;
+        // onClick ={props.handleClick.bind(null,index)}
+        onClick={() => {
+        console.log(`clicked ${index}`);
+        props.handleClick(index);
+        }} 
+        > {item.name} </li>;
         })}
         </ul>
 );

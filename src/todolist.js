@@ -8,7 +8,23 @@ constructor(props) {
     this.state = {
     term: "",
     items: []
+
     };
+}
+componentDidMount() {
+    // Make a Ajax call!
+    console.log('about to get todos');
+    fetch('/todos')
+    .then(r => r.json())
+    .then(todoArray =>{
+        // this.setState({
+        //     items: todoArray.map( todo => todo.name)
+        // });
+        this.setState({
+            items:todoArray
+        });
+    })
+
 }
 render() {
     return (
@@ -19,10 +35,9 @@ render() {
         term={this.state.term}
         onChange={this._onChange}
         />
-
         <div>
         <List items={this.state.items} delete={this.delete}
-            handleClick ={this._deleteTodo}
+        handleClick ={this._deleteTodo}
         />
         </div>
     </div>
