@@ -3,7 +3,11 @@ import React from 'react';
 const List = (props) => {
 return (<ul>
         {props.items.map((item, index) => {
-        return <li key={index}> {item} </li>;
+        return <li key={index} className="single-todo" 
+        onClick={() => {
+        console.log(`clicked ${index}`);
+        props.handleClick(index);
+        }} > {item} </li>;
         })}
         </ul>
 );
