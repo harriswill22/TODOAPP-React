@@ -44,9 +44,9 @@ render() {
     );
 }
 
-_deleteTodo = indexToDelete => {
+_deleteTodo = (idToDelete) => {
     this.setState({
-        items: this.state.items.filter((item,index) => index !== indexToDelete)
+        items: this.state.items.filter((item) => item.id !== idToDelete)
     });
     // let itemsToKeep= []
     // this.state.items.forEach((item, index) =>{
