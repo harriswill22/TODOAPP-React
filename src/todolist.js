@@ -31,8 +31,11 @@ class TodoList extends Component {
 
 
     _OnChange =(event) =>{
+        const userInput = event.target.value
         this.setState({
-            term: event.target.value
+            term: userInput
+        }, () => {
+            console.log("hellooo");
         });
     }
 
