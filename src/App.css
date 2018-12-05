@@ -18,6 +18,11 @@
   color: white;
 }
 
+.single-todo{
+  border: 1px;
+  border-color: blue;
+}
+
 .App-link {
   color: #61dafb;
 }
