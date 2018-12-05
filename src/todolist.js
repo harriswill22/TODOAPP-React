@@ -3,82 +3,123 @@ import List from "./list";
 import TodoForm from "./TodoForm";
 
 class TodoList extends Component {
-constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
-    term: "",
-    items: []
-
+      term: "",
+      items: []
     };
-}
-componentDidMount() {
-    // Make a Ajax call!
-    console.log('about to get todos');
+    // ewwwww.
+    // this._deleteTodo = this._deleteTodo.bind(this);
+  }
+
+  componentDidMount() {
+    // Make the Ajax call!
+    // Do eeeeet!
+    console.log('about to retrieve todos');
     fetch('/todos')
     .then(r => r.json())
-    .then(todoArray =>{
+    .then(todoArray => {
+        console.table(todoArray);
+        // Version #1: just keep the names
         // this.setState({
-        //     items: todoArray.map( todo => todo.name)
+        //   items: todoArray.map(todo => todo.name)
         // });
-        this.setState({
-            items:todoArray
-        });
-    })
 
-}
-render() {
+        // Version #2: save the entire array of objects
+        this.setState({
+          items: todoArray
+        });
+
+      })
+  }
+
+  render() {
     return (
-    <div className="todo-container">
+      <div className="todo-container">
         <h1 className="title">Todo App</h1>
-        <TodoForm
-        onSubmit={this._onSubmit}
-        term={this.state.term}
-        onChange={this._onChange}
+        <TodoForm 
+          onSubmit={this._onSubmit}
+          term={this.state.term}
+          onChange={(event) => this._onChange(event.target.value)}
         />
         <div>
-        <List items={this.state.items} delete={this.delete}
-        handleClick ={this._deleteTodo}
-        />
+          <List 
+            items={this.state.items}
+            handleClick={this._deleteTodo}
+          />
         </div>
-    </div>
+      </div>
     );
-}
+  }
 
-_deleteTodo = (idToDelete) => {
-    this.setState({
-        items: this.state.items.filter((item) => item.id !== idToDelete)
-    });
-    // let itemsToKeep= []
-    // this.state.items.forEach((item, index) =>{
-    //     if (index === indexToDelete) {
-    //         console.log(`${index}: deleted it`);
-    //     }else {
-    //         console.log(`keep it ${index}`);
-    //         itemsToKeep.push(item)
-    //     }
+  _deleteTodo = (idToDelete) => {
+    console.log(this);
+
+    fetch(`/todos/${idToDelete}`, {
+      method: 'DELETE'
+    })
+    .then(result => {
+      console.log(result);
+      this.setState({
+        items: this.state.items.filter(item => item.id !== idToDelete)
+      });
+    })
+
+
+    // let itemsToKeep = [];
+    // // keep all the items except the one at `indexToDelete`
+    // this.state.items.forEach((item, index) => {
+    //   if (index === indexToDelete) {
+    //     console.log(`${index}: delete it!`);
+    //   } else {
+    //     console.log(`${index}: keep it!`);
+    //     itemsToKeep.push(item);
+    //   }
     // });
+    // // this.state.items = itemsToKeep;
     // this.setState({
-    //     items: itemsToKeep 
-    // })
-}
+    //   items: itemsToKeep
+    // });
+  }
 
-
-
-_onChange = event => {
+  _onChange = userInput => {
+    // const userInput = event.target.value;
+    console.log(userInput);
     this.setState({
-    term: event.target.value
+      term: userInput
+    }, () => {
+      console.log('wheee! state is now updated');
     });
-};
+  };
 
-_onSubmit = event => {
+  _onSubmit = event => {
     //puts on the brakes
     event.preventDefault();
     // console.log("submitted!");
-    this.setState({
-    term: "",
-    items: [...this.state.items, this.state.term]
-    });
-};
+
+    fetch('/todos', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: this.state.term
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(r => r.json())
+    .then(todo => {
+      console.log(todo);
+      console.log('^^ is your new todo. enjoy.')
+      this.setState({
+        term: "",
+        items: [...this.state.items, todo]
+      });
+    })
+
+  };
 }
+
+
 
 export default TodoList;
